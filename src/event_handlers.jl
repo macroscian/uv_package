@@ -130,6 +130,8 @@ function tally(gene::Gene, event::indexed_event, elapsed::Float64)
     if (length(bin)!=0)
         gene.tally_matrix[:,1+gene.history[:tally]] .= counts(bin, UnitRange(0,size(gene.tally_matrix,1)-1))
     end
+    gene.phospho[1,1+gene.history[:tally]] = length(gene.pol_position) # number of pols on gene
+    gene.phospho[2,1+gene.history[:tally]] = gene.pol_N # number of pols in cell
     return(nothing)
 end
 

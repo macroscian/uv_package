@@ -61,7 +61,8 @@ pol_id                 ::Vector{Int64}
 next_id                ::Int64
 pol_N                  ::Float64
 default_speed          ::Float64
-tally_matrix            ::Array{Int64,2}
+tally_matrix           ::Array{Int64,2}
+hyperphospho           ::Array{Int64,2}
 time                   ::Float64
 vars                   ::Dict
 history                ::Dict

@@ -152,12 +152,14 @@ function main(scenarios::Array{Dict{String, Any},1}, cell::Array{Dict{String, An
     path_data=IOBuffer()
     write(path_data,"{\"data\": [")
     cartoon = Dict{String, String}()
+    phospho = Dict{String, String}()
     history = Dict()
     for scenario in scenarios
         print(scenario)
         myvars = merge(vars, scenario)
         ss_total=Array{Array{Int64,2}}(undef, length(cell))
         gene_total=Array{Array{Int64,2}}(undef, length(cell))
+        this_phospho=Array{Array{Int64,2}}(undef, length(cell))
         ch=Array{Dict{Symbol,Int64}}(undef, length(cell))
         for i=1:n_iter
             print(scenario["name"], "_", task_id, "_", i, "\n")
@@ -175,15 +177,18 @@ function main(scenarios::Array{Dict{String, Any},1}, cell::Array{Dict{String, An
                     gene_total[gene_instance] =  genes[gene_instance].tally_matrix
                     ss_total[gene_instance] =  ss[gene_instance].tally_matrix
                     ch[gene_instance]=genes[gene_instance].history
+                    this_phospho[gene_instance] = genes[gene_instance].phospho
                 else
                     gene_total[gene_instance] .= gene_total[gene_instance] .+ genes[gene_instance].tally_matrix
                     ss_total[gene_instance] .= ss_total[gene_instance] .+ ss[gene_instance].tally_matrix
+                    this_phospho[gene_instance] .= this_phospho[gene_instance] + genes[gene_instance].phospho
                     for (k,v) in genes[gene_instance].history
                         ch[gene_instance][k] += v
                     end
                 end
             end
         end
+        phospho[scenario["name"]] = JSON.json(this_phospho)
         history[scenario["name"]] = Dict(cell[k]["name"] => Dict(k1 => v1/n_iter for (k1, v1) in ch[k]) for k in keys(ch))
         my_gene_vars = Dict(g => merge(myvars, cell[g]) for g in keys(cell))
         JSON.print(path_data, gene_total)
@@ -204,6 +209,8 @@ function main(scenarios::Array{Dict{String, Any},1}, cell::Array{Dict{String, An
     JSON.print(path_data, Dict(v => JSON.parse(cartoon[v]) for v in keys(cartoon)))
     write(path_data, ",\n \"history\": ")
     JSON.print(path_data, history)
+    write(path_data, ",\n \"phospho\": ")
+    JSON.print(path_data, phospho)
     write(path_data,"}\n")
     return String(take!(path_data))
 end

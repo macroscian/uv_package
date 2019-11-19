@@ -30,7 +30,7 @@ const vars = Dict{String, Any}(
     "complete_reuse_p"  => 1, # Probability of transcript-complete pol re-entering pool
 #    "dropoff_reuse_p"   => 1, # Probability of incomplete-transcript pol re-entering pool
     "genome_prop"         => 1,
-    "tally_interval"     => 3minutes,
+    "tally_interval"     => 15minutes,
     "tally_binsize"      => 1kb,
     "zero"              => 1e-10
 )
