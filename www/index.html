@@ -155,6 +155,7 @@
 			 "pol_N",
 			 "pause_site",
 			 "release_time",
+			 "inhibition",
 			 "pol_speed",
 			 "pol_size",
 			 "processivity",
@@ -174,6 +175,7 @@
      }
      function label(k) {
 	 var UI_names = {gene_length:"Gene Length",
+			 inhibition:"Inhib. Period",
 			 initiation_period:"Init. Period",
 			 uv_distance:"UV dist.",
 			 run_length:"Run time",
@@ -201,6 +203,7 @@
      function tooltip(k) {
 	 var UI_tips = {gene_length:"Length of gene from start to completion in bases",
 			initiation_period:"Expected time between consecutive initiation attempts",
+			inhibition:"Time until inhibition of all transcription - blank will maintain transcription",
 			uv_distance:"Expected distance between UV damage sites, leave blank for no damage",
 			run_length:"How long after damage to monitor polymerase positions",
 			pol_speed:"Speed of freely moving polymerases",
