@@ -38,6 +38,7 @@ function update_prior_times(gene::Gene, willelapse::Float64)
     end
     gene.events.initiate.time[1] -= willelapse
     gene.events.pause.time[1] -= willelapse
+    gene.events.inhibition.time[1] -= willelapse
     gene.events.complete.time[1] -= willelapse
     gene.events.release.time[1] -= willelapse
     gene.events.block.time[1] -= willelapse
