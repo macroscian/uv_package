@@ -68,6 +68,7 @@ const time_handlers = Dict(
     :bump => [bump_t, pause_t, block_t, complete_t],
     :release => [block_t, bump_t, pause_t, complete_t],
     :pause => [block_t, bump_t],
+    :inhibition => [],
     :processivity => [block_t, bump_t, pause_t, complete_t],
     :dissoc => [block_t, bump_t, pause_t, complete_t],
     :degrad => [block_t, bump_t, pause_t, complete_t],
