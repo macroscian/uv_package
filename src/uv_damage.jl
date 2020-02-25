@@ -74,8 +74,8 @@ function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=f
         JSON.print(io,genes[gene_to_record].events.repair.time[time_ord])
         write(io, ",\"pols\":[")
     end
+    is_inhibited = false
     while time_left > 0
-        is_inhibited = false
         ind = argmin(time_to_next)
         genes[ind].pol_N = pol_N # so `update` will have access to this property of the 'cell'
         (elapsed,ev)=update!(genes[ind])
