@@ -25,7 +25,6 @@ end
 
 function inhibition(gene::Gene, event::indexed_event, elapsed::Float64)
     move_pols!(gene, elapsed)
-    gene.freedPols=-Inf
     return(nothing)
 end
 
