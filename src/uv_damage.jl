@@ -74,7 +74,6 @@ function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=f
         JSON.print(io,genes[gene_to_record].events.repair.time[time_ord])
         write(io, ",\"pols\":[")
     end
-    is_inhibited = false
     while time_left > 0
         ind = argmin(time_to_next)
         genes[ind].pol_N = pol_N # so `update` will have access to this property of the 'cell'
@@ -98,18 +97,17 @@ function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=f
                 time_to_next[j] -= delta_t
             end
         end
-        if ev == :inhibition
-            pol_N = 0
-            is_inhibited = true
-             for g in keys(genes)
-                     genes[g].events.initiate.time[1] = Inf
-             end
+        if ev==:inhibition
+            for g in keys(genes)
+                genes[g].is_inhibited = true
+                genes[g].events.initiate.time[1] = Inf
+            end
         end
         # Do we need to refresh the initiation rates
-        if (genes[ind].freedPols !=0) & (!is_inhibited)
+        if (genes[ind].freedPols !=0)
             pol_N +=  genes[ind].freedPols * genes[ind].vars["genome_prop"]
              for g in keys(genes)
-                 if genes[g].vars["genome_prop"] > pol_N
+                 if (genes[g].vars["genome_prop"] > pol_N) | (genes[g].is_inhibited)
                      genes[g].events.initiate.time[1] = Inf
                  else
                      t = random_time(v["initiation_period"] * v["pol_N"] / pol_N )[1]

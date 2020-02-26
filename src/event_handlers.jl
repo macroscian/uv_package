@@ -8,7 +8,9 @@ function initiate(gene::Gene, event::indexed_event, elapsed::Float64)
     else
         gene.history[:failed] += 1
     end
-    event.time[1] = random_time(gene.vars["initiation_period"] * gene.vars["pol_N"] / gene.pol_N )[1]
+    if !gene.is_inhibited
+        event.time[1] = random_time(gene.vars["initiation_period"] * gene.vars["pol_N"] / gene.pol_N )[1]
+    end
     return(nothing)
 end
         

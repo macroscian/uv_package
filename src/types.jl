@@ -70,6 +70,7 @@ vars                   ::Dict
 history                ::Dict
 loci                   ::Vector{Int64}
 freedPols              ::Int64
+is_inhibited           ::Bool
 end
 
 function Gene(vars::Dict)
@@ -82,10 +83,10 @@ function Gene(vars::Dict)
                                length(damage))
     repairevent = indexed_event(repair_times,(length(damage)==0) ? missing : argmin(repair_times))
     events = EventSet(
-    initiate = indexed_event(random_time(vars["initiation_period"],1)),
-    repair = repairevent,
-    inhibition = indexed_event(vars["inhibition"]),    
-    tally = indexed_event(Float64(0))
+        initiate = indexed_event(random_time(vars["initiation_period"],1)),
+        repair = repairevent,
+        inhibition = indexed_event(vars["inhibition"]),    
+        tally = indexed_event(Float64(0))
     )
     loci = vcat(damage, 0, vars["pause_site"], vars["gene_length"])
     loci = reverse(sort(loci))
@@ -106,7 +107,8 @@ function Gene(vars::Dict)
          vars,
          hist,
          loci,
-         0
+         0,
+         false
          )
 end
 
