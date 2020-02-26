@@ -76,6 +76,9 @@ function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=f
     end
     while time_left > 0
         ind = argmin(time_to_next)
+        if isinf(time_to_next[ind])
+            break
+        end
         genes[ind].pol_N = pol_N # so `update` will have access to this property of the 'cell'
         (elapsed,ev)=update!(genes[ind])
         if record && (ind==gene_to_record) && ev==:initiate
