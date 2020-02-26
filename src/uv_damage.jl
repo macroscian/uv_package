@@ -54,7 +54,9 @@ function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=f
     gene_to_record=1
     io=IOBuffer()
     genes = [Gene(merge(v,g)) for g in cell]
+    print("Pre steady-state\n")
     ss = [steady_state!(g) for g in genes]
+    print("Post steady-state\n")
     for g in keys(genes)
         genes[g].default_speed *= genes[g].vars["speed_factor_t0"]
         genes[g].pol_speed .*= genes[g].vars["speed_factor_t0"]
@@ -81,6 +83,7 @@ function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=f
         end
         genes[ind].pol_N = pol_N # so `update` will have access to this property of the 'cell'
         (elapsed,ev)=update!(genes[ind])
+        print(ev)
         if record && (ind==gene_to_record) && ev==:initiate
             JSON.print(io, Dict("time" => genes[ind].time,
                                 "position" => floor.(Int64, genes[ind].pol_position),
@@ -172,8 +175,8 @@ function main(scenarios::Array{Dict{String, Any},1}, cell::Array{Dict{String, An
     cartoon = Dict{String, String}()
     history = Dict()
     for scenario in scenarios
-        print(scenario)
         myvars = merge(vars, scenario)
+        print(myvars)
         ss_total=Array{Array{Int64,2}}(undef, length(cell))
         gene_total=Array{Array{Int64,2}}(undef, length(cell))
         ch=Array{Dict{Symbol,Int64}}(undef, length(cell))
