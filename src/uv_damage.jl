@@ -83,7 +83,6 @@ function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=f
         end
         genes[ind].pol_N = pol_N # so `update` will have access to this property of the 'cell'
         (elapsed,ev)=update!(genes[ind])
-        print(ev)
         if record && (ind==gene_to_record) && ev==:initiate
             JSON.print(io, Dict("time" => genes[ind].time,
                                 "position" => floor.(Int64, genes[ind].pol_position),
@@ -104,6 +103,7 @@ function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=f
             end
         end
         if ev==:inhibition
+        print(ev)
             for g in keys(genes)
                 genes[g].is_inhibited = true
                 genes[g].events.initiate.time[1] = Inf
