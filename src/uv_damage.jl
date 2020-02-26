@@ -54,9 +54,7 @@ function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=f
     gene_to_record=1
     io=IOBuffer()
     genes = [Gene(merge(v,g)) for g in cell]
-    print("Pre steady-state\n")
     ss = [steady_state!(g) for g in genes]
-    print("Post steady-state\n")
     for g in keys(genes)
         genes[g].default_speed *= genes[g].vars["speed_factor_t0"]
         genes[g].pol_speed .*= genes[g].vars["speed_factor_t0"]
@@ -103,7 +101,6 @@ function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=f
             end
         end
         if ev==:inhibition
-        print(ev)
             for g in keys(genes)
                 genes[g].is_inhibited = true
                 genes[g].events.initiate.time[1] = Inf

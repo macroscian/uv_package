@@ -27,6 +27,7 @@ end
 
 function inhibition(gene::Gene, event::indexed_event, elapsed::Float64)
     move_pols!(gene, elapsed)
+    gene.events.inhibition.time[1] = Inf
     return(nothing)
 end
 
