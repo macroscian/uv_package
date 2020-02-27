@@ -37,6 +37,7 @@ function steady_state!(gene::Gene)
     gene.events.tally.time[1] = Float64(0)
     gene.events.repair.time .+=  gene.time
     gene.events.block.time .+=  gene.time
+    gene.events.inhibition.time .+=  gene.time
     gene.time = 0.0
     ss = deepcopy(gene)
     ss.tally_matrix[:,1] .= counts(div.(floor.(Int, ss.pol_position.-1), ss.vars["tally_binsize"]), UnitRange(0,size(ss.tally_matrix,1)-1))
@@ -53,15 +54,15 @@ end
 function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=false)
     gene_to_record=1
     io=IOBuffer()
-    genes = [Gene(merge(v,g)) for g in cell]
-    ss = [steady_state!(g) for g in genes]
+    genes = [uv_damage.Gene(merge(v,g)) for g in cell]
+    ss = [uv_damage.steady_state!(g) for g in genes]
     for g in keys(genes)
         genes[g].default_speed *= genes[g].vars["speed_factor_t0"]
         genes[g].pol_speed .*= genes[g].vars["speed_factor_t0"]
     end
     ntime=0
     time_left=sim_time
-    time_to_next = [nextEvent(g)[1] for g in genes]
+    time_to_next = [uv_damage.nextEvent(g)[1] for g in genes]
     since_last = [0.0 for g in genes]
     pol_N = v["pol_N"];
     if record
@@ -102,6 +103,7 @@ function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=f
             end
         end
         if ev==:inhibition
+            print(time_left)
             for g in keys(genes)
                 genes[g].is_inhibited = true
                 genes[g].events.initiate.time[1] = Inf
