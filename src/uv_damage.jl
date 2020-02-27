@@ -77,6 +77,7 @@ function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=f
     while time_left > 0
         ind = argmin(time_to_next)
         if isinf(time_to_next[ind])
+            print(time_left)
             break
         end
         genes[ind].pol_N = pol_N # so `update` will have access to this property of the 'cell'
@@ -184,7 +185,7 @@ function main(scenarios::Array{Dict{String, Any},1}, cell::Array{Dict{String, An
 	        Pages.message("/uv_damage", client_id, "script", "progress(\"$scen\",\"$i\")")
             end
             Random.seed!(i - 1 + task_id*n_iter);
-            (genes,ss,cartoon_data)=simulate(myvars, cell, record=i==1);
+            (genes,ss,cartoon_data)=simulate(myvars, cell, record=i==1)
             if (i==1)
                 cartoon[scenario["name"]] = cartoon_data
             end

@@ -36,41 +36,42 @@ end
 
 # *** EventSet - all things that can happen to a polymerase and when
 struct EventSet
-initiate      ::indexed_event
-block         ::indexed_event
-bump          ::indexed_event
-release       ::indexed_event
-pause         ::indexed_event
-tally          ::indexed_event
-processivity  ::indexed_event
-dissoc        ::indexed_event
-degrad        ::indexed_event
-complete      ::indexed_event
-repair        ::indexed_event
-inhibition    ::indexed_event    
-    EventSet(;initiate=indexed_event(), block=indexed_event(), bump=indexed_event(), release=indexed_event(), pause=indexed_event(), tally=indexed_event(), processivity=indexed_event(Float64[]), dissoc=indexed_event(Float64[]), degrad=indexed_event(Float64[]), complete=indexed_event(), repair=indexed_event(), inhibition=indexed_event()) =
+    initiate      ::indexed_event
+    block         ::indexed_event
+    bump          ::indexed_event
+    release       ::indexed_event
+    pause         ::indexed_event
+    tally         ::indexed_event
+    processivity  ::indexed_event
+    dissoc        ::indexed_event
+    degrad        ::indexed_event
+    complete      ::indexed_event
+    repair        ::indexed_event
+    inhibition    ::indexed_event    
+    EventSet(;initiate=indexed_event(), block=indexed_event(), bump=indexed_event(), release=indexed_event(), pause=indexed_event(), tally=indexed_event(),
+             processivity=indexed_event(Float64[]), dissoc=indexed_event(Float64[]), degrad=indexed_event(Float64[]), complete=indexed_event(), repair=indexed_event(), inhibition=indexed_event()) =
         new(initiate, block, bump, release, pause, tally, processivity, dissoc, degrad, complete, repair, inhibition)
 end
 
 
 # ***  Gene - contains polymerase state, all scheduled events, and a history log
 mutable struct Gene
-events                 ::EventSet
-damage                 ::Array{Float64}
-pol_position           ::Vector{Float64}
-pol_speed              ::Vector{Float64}
-pol_state              ::Vector{String}
-pol_id                 ::Vector{Int64}
-next_id                ::Int64
-pol_N                  ::Float64
-default_speed          ::Float64
-tally_matrix            ::Array{Int64,2}
-time                   ::Float64
-vars                   ::Dict
-history                ::Dict
-loci                   ::Vector{Int64}
-freedPols              ::Int64
-is_inhibited           ::Bool
+    events                 ::EventSet
+    damage                 ::Array{Float64}
+    pol_position           ::Vector{Float64}
+    pol_speed              ::Vector{Float64}
+    pol_state              ::Vector{String}
+    pol_id                 ::Vector{Int64}
+    next_id                ::Int64
+    pol_N                  ::Float64
+    default_speed          ::Float64
+    tally_matrix           ::Array{Int64,2}
+    time                   ::Float64
+    vars                   ::Dict
+    history                ::Dict
+    loci                   ::Vector{Int64}
+    freedPols              ::Int64
+    is_inhibited           ::Bool
 end
 
 function Gene(vars::Dict)
