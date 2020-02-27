@@ -11,7 +11,7 @@ using Pages#master
 using HTTP
 
 
-include("cell_settings.jl")
+include("cell_settings_attenuation.jl")
 include("types.jl")
 include("event_handlers.jl")
 include("time_calculators.jl")
@@ -78,12 +78,11 @@ function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=f
     while time_left > 0
         ind = argmin(time_to_next)
         if isinf(time_to_next[ind])
-            print(time_left)
             break
         end
         genes[ind].pol_N = pol_N # so `update` will have access to this property of the 'cell'
         (elapsed,ev)=update!(genes[ind])
-        if record && (ind==gene_to_record) && (ev==:initiate || ev==:complete)
+        if record && (ind==gene_to_record) && (ev==:initiate || (genes[ind].is_inhibited && ev==:complete))
             JSON.print(io, Dict("time" => genes[ind].time,
                                 "position" => floor.(Int64, genes[ind].pol_position),
                                 "id" => genes[ind].pol_id,

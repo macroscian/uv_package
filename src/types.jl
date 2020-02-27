@@ -86,7 +86,7 @@ function Gene(vars::Dict)
     events = EventSet(
         initiate = indexed_event(random_time(vars["initiation_period"],1)),
         repair = repairevent,
-        inhibition = indexed_event(vars["inhibition"]),    
+        inhibition = indexed_event(Float64(vars["inhibition"])),    
         tally = indexed_event(Float64(0))
     )
     loci = vcat(damage, 0, vars["pause_site"], vars["gene_length"])
