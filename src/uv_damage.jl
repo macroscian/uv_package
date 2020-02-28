@@ -64,7 +64,7 @@ function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=f
     time_left=sim_time
     time_to_next = [uv_damage.nextEvent(g)[1] for g in genes]
     since_last = [0.0 for g in genes]
-    pol_N = v["pol_N"];
+    pol_N = v["pol_N"]
     if record
         time_ord = sortperm(genes[gene_to_record].events.repair.time)
         write(io, "{\"damage\":" )
@@ -102,7 +102,6 @@ function simulate(v::Dict{String, Any}, cell; sim_time=v["run_length"], record=f
             end
         end
         if ev==:inhibition
-            print(time_left)
             for g in keys(genes)
                 genes[g].is_inhibited = true
                 genes[g].events.initiate.time[1] = Inf
@@ -175,7 +174,7 @@ function main(scenarios::Array{Dict{String, Any},1}, cell::Array{Dict{String, An
     history = Dict()
     for scenario in scenarios
         myvars = merge(vars, scenario)
-        print(myvars)
+        print(myvars, "\n")
         ss_total=Array{Array{Int64,2}}(undef, length(cell))
         gene_total=Array{Array{Int64,2}}(undef, length(cell))
         ch=Array{Dict{Symbol,Int64}}(undef, length(cell))
