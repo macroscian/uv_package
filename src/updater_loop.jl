@@ -16,7 +16,7 @@ function nextEvent(gene::Gene; events=fieldnames(EventSet))
     nexter=(Inf, :n)
     for x in events
         ts=getfield(gene.events, x).time
-        if (x==:dissoc) || (x==:degrad)
+        if x==:dissoc | x==:degrad
             ts = ts[gene.pol_state .== "active"]
         end
         if length(ts)!=0
